@@ -220,6 +220,12 @@ assign trafficpenalty =
   )
   else 0
 
+assign smoothness_penalty =
+    if smoothness=excellent|very_good|good                    then 0.0 else
+    if smoothness=intermediate                                then 0.5 else
+    if smoothness=bad|robust_wheels|very_bad|high_clearance|horrible|off_road_wheels|very_horrible|impassable then 50.0 else
+    0.0
+
 assign costfactor
 
   #
@@ -247,6 +253,8 @@ assign costfactor
 
   # Add trafficpenalty
   add trafficpenalty
+
+  add smoothness_penalty
 
   #
   # steps and ferries are special. Note this is handled
