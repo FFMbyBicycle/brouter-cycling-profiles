@@ -122,15 +122,15 @@ assign defaultaccess =
 # calculate logical bike access
 #
 assign bikeaccess =
-       if any_cycleroute then true
+       # Avoid footways at any times, even with "Radverkehr frei" (Germany), which in most cases are quite narrow and not eligible for riding your normal speed
+       if highway=footway then false
+       else if any_cycleroute then true
        else if bicycle= then
        (
          if bicycle_road=yes then true
          else if vehicle= then ( if highway=footway then false else defaultaccess )
          else not vehicle=private|no
        )
-       # Avoid footways with "Radverkehr frei" (Germany), which in most cases are quite narrow and not eligible for riding your normal speed
-       else if and highway=footway bicycle=yes then false
        else not bicycle=private|no|dismount
 
 #
