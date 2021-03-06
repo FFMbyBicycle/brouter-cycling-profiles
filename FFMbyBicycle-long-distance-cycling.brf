@@ -122,8 +122,9 @@ assign defaultaccess =
 # calculate logical bike access
 #
 assign bikeaccess =
-       # Avoid footways at any times, even with "Radverkehr frei" (Germany), which in most cases are quite narrow and not eligible for riding your normal speed
-       if highway=footway then false
+       # Only allow footways with "Radverkehr frei" (Germany) when it is a bridge (good shortcut). Those ways in most cases are quite narrow and not eligible for riding your normal speed.
+       if and highway=footway bridge=yes then true
+       else if highway=footway then false
        else if any_cycleroute then true
        else if bicycle= then
        (
