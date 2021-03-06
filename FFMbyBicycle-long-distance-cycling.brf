@@ -123,7 +123,7 @@ assign defaultaccess =
 #
 assign bikeaccess =
        # Only allow footways with "Radverkehr frei" (Germany) when it is a bridge (good shortcut). Those ways in most cases are quite narrow and not eligible for riding your normal speed.
-       if and highway=footway bridge=yes then true
+       if and and highway=footway ( or bicycle=yes bicycle=designated) bridge=yes then true
        else if highway=footway then false
        else if any_cycleroute then true
        else if bicycle= then
