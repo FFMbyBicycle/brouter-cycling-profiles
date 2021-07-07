@@ -76,8 +76,8 @@ assign is_ldcr =
 
 assign hascycleway = if ( not and ( or cycleway= cycleway=no|none ) and ( or cycleway:left= cycleway:left=no ) and ( or cycleway:right= cycleway:right=no ) ( cycleway=both ) ) then 0 else 1
 assign isbike = or bicycle_road=yes or bicycle=yes or bicycle=permissive or bicycle=designated or lcn=yes or highway=cycleway hascycleway
-assign ispaved = surface=paved|asphalt|concrete|wood|paving_stones
-assign isunpaved = surface=unpaved|compacted|gravel|pebblestone|ground|dirt|grass|mud|sand|sett|cobblestone|fine_gravel|earth # List of surfaces which will be avoided
+assign ispaved = or surface=paved|asphalt|concrete|wood|paving_stones cycleway:surface=paved|asphalt|concrete|paving_stones
+assign isunpaved = or surface=unpaved|compacted|gravel|pebblestone|ground|dirt|grass|mud|sand|sett|cobblestone|fine_gravel|earth cycleway:surface=unpaved|compacted|gravel|sett|cobblestone|fine_gravel
 assign probablyGood = or ispaved and ( or isbike highway=footway ) not isunpaved
 assign ishighspeed = maxspeed=70|80|90|100|110|120|130 # Avoid streets with high speed car traffic and no cycling infrastructure
 
