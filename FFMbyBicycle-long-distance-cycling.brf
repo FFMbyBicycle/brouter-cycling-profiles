@@ -74,7 +74,7 @@ assign is_ldcr =
      if ignore_cycleroutes then false
      else any_cycleroute
 
-assign hascycleway = if ( not and ( or cycleway= cycleway=no|none ) and ( or cycleway:left= cycleway:left=no ) and ( or cycleway:right= cycleway:right=no ) ( cycleway=both ) ) then 0 else 1
+assign hascycleway = if ( and ( or cycleway= cycleway=no|none ) and ( or cycleway:left= cycleway:left=no ) ( or cycleway:right= cycleway:right=no ) ) then 0 else 1
 assign isbike = or bicycle=yes or bicycle=permissive or bicycle=designated or lcn=yes hascycleway
 assign ispaved = or surface=paved|asphalt|concrete|wood|paving_stones cycleway:surface=paved|asphalt|concrete|paving_stones
 assign isunpaved = or surface=unpaved|compacted|gravel|pebblestone|ground|dirt|grass|mud|sand|sett|cobblestone|fine_gravel|earth cycleway:surface=unpaved|compacted|gravel|sett|cobblestone|fine_gravel
