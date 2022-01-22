@@ -123,7 +123,7 @@ assign defaultaccess =
 #
 assign bikeaccess =
        # Only allow footways with "Radverkehr frei" (Germany) when it is a bridge (good shortcut). Those ways in most cases are quite narrow and not eligible for riding your normal speed.
-       if and and highway=footway ( or bicycle=yes bicycle=designated ) ( or bridge=yes tunnel=yes ) then true
+       if and highway=footway ( or bicycle=yes bicycle=designated ) then true
        else if highway=footway then false
        else if any_cycleroute then true
        else if bicycle= then
@@ -276,6 +276,9 @@ assign costfactor
   # some other highway types
   #
   if      ( highway=pedestrian                         ) then 5
+  # Only allow footways with "Radverkehr frei" (Germany) at high costs when it is not a bridge/tunnel (good shortcut). Those ways in most cases are quite narrow and not eligible for riding your normal speed.
+  else if ( and highway=footway and ( or bicycle=yes bicycle=designated ) ( or bridge=yes tunnel=yes ) ) then 1.0
+  else if ( highway=footway                            ) then 3
   else if ( highway=bridleway                          ) then ( if isunpaved then 200 else 10 )
   else if ( highway=cycleway                           ) then ( if probablyGood then 1.1 else if isunpaved then 200 else 1.0 )
   else if ( highway=residential                        ) then ( if isunpaved then 200 else 1.1 )
