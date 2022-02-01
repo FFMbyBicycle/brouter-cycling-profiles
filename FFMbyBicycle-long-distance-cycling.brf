@@ -89,6 +89,7 @@ assign ishighspeed = or maxspeed=70|80|90|100|110|120|130 maxspeed= # Avoid stre
 #
 assign turncost = if is_ldcr then 0
                   else if junction=roundabout then 0
+                  else if or bridge=yes tunnel=yes then 50 # there are a lot of nice bridge/tunnel shortcuts with tight corners, which will save energy and time
                   else 150 # 150 is quite high but will allow a more straight route at the cost of a longer route. Still saves time and energy because of missing slowdowns at turns
 
 
