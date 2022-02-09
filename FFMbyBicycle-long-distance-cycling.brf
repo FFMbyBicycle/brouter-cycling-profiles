@@ -178,8 +178,6 @@ assign onewaypenalty =
 # must be >=1 and it's supposed to be close to 1 for
 # the type of way the routing profile is searching for
 #
-assign hascycleway = not
-  and ( or cycleway= cycleway=no|none ) and ( or cycleway:left= cycleway:left=no ) ( or cycleway:right= cycleway:right=no )
 
 #
 # Add traffic penalty for ways with high car traffic
