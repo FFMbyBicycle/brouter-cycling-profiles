@@ -76,7 +76,7 @@ assign is_ldcr =
 
 assign hascycleway = if ( and ( or cycleway= cycleway=no|none ) and ( or cycleway:left= cycleway:left=no ) ( or cycleway:right= cycleway:right=no ) ) then 0 else 1
 assign isbike = or bicycle=yes or bicycle=permissive or bicycle=designated or lcn=yes hascycleway
-assign ispaved = or surface=paved|asphalt|concrete|wood|paving_stones|metal cycleway:surface=paved|asphalt|concrete|paving_stones
+assign ispaved = or surface=paved|asphalt|concrete|wood|paving_stones|metal or cycleway:surface=paved|asphalt|concrete|paving_stones ( and surface=concrete concrete=plates|lanes ) # surface=concrete concrete=plates|lanes is an alias for surface=concrete:plates / surface=concrete:lanes, see also https://github.com/abrensch/brouter/issues/61
 assign isunpaved = or surface=unpaved|compacted|gravel|pebblestone|ground|dirt|grass|mud|sand|sett|cobblestone|fine_gravel|earth|grass_paver cycleway:surface=unpaved|compacted|gravel|sett|cobblestone|fine_gravel
 assign probablyGood = or ispaved and ( or isbike highway=footway ) ( or not isunpaved surface=compacted )
 assign ishighspeed = or maxspeed=70|80|90|100|110|120|130 maxspeed= # Avoid streets with high speed car traffic and no cycling infrastructure
