@@ -392,7 +392,7 @@ assign footaccess =
 # Avoid traffic signals and stop signs
 #
 assign initialcost =
-       add ( if highway=traffic_signals then 120
+       add ( if or highway=traffic_signals highway=elevator then 120
          else if highway=stop then 50
          else if barrier=cycle_barrier then 20
          else if and highway=crossing bicycle=no then 60
