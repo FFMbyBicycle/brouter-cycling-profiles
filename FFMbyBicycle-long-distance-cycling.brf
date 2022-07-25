@@ -90,7 +90,7 @@ assign ishighspeed = or maxspeed=70|80|90|100|110|120|130 maxspeed= # Avoid stre
 assign turncost = if is_ldcr then 0
                   else if junction=roundabout then 0
                   else if or bridge=yes tunnel=yes then 40 # there are a lot of nice bridge/tunnel shortcuts with tight corners, which will save energy and time
-                  else 150 # 150 is quite high but will allow a more straight route at the cost of a longer route. Still saves time and energy because of missing slowdowns at turns
+                  else 180 # This is quite high but will allow a more straight route at the cost of a longer route. Still saves time and energy because of missing slowdowns at turns
 
 #
 # for any change in initialclassifier, initialcost is added once
@@ -179,46 +179,8 @@ assign onewaypenalty =
 # the type of way the routing profile is searching for
 #
 
-#
-# Add traffic penalty for ways with high car traffic
-# See https://forum.openstreetmap.org/viewtopic.php?id=31044 for more information
-#
-assign trafficpenalty0 =
-    if highway=primary|primary_link then
-    (
-      if      estimated_traffic_class=4 then 0.2
-      else if estimated_traffic_class=5 then 0.4
-      else if estimated_traffic_class=6|7 then 0.6
-      else 0
-    )
-    else if highway=secondary|secondary_link then
-    (
-      if      estimated_traffic_class=3 then 0.2
-      else if estimated_traffic_class=4 then 0.4
-      else if estimated_traffic_class=5 then 0.6
-      else if estimated_traffic_class=6|7 then 1
-      else 0
-    )
-    else if highway=tertiary|tertiary_link then
-    (
-      if      estimated_traffic_class=2 then 0.1
-      else if estimated_traffic_class=3 then 0.3
-      else if estimated_traffic_class=4 then 0.5
-      else if estimated_traffic_class=5|6|7 then 1
-      else 0
-    )
-    else 0
-
-assign trafficpenalty =
-  if consider_traffic then
-  (
-    if hascycleway then min 0.3 trafficpenalty0
-    else trafficpenalty0
-  )
-  else 0
-
 assign smoothness_penalty =
-    if smoothness=excellent|very_good|good                    then 0.0 else
+    if smoothness=excellent|very_good|good                    then -0.2 else
     if smoothness=intermediate                                then 0.5 else
     if smoothness=bad|robust_wheels|very_bad|high_clearance|horrible|off_road_wheels|very_horrible|impassable then 50.0 else
     0.0
@@ -247,9 +209,6 @@ assign costfactor
   # apply oneway-and access-penalties
   #
   add max onewaypenalty accesspenalty
-
-  # Add trafficpenalty
-  add trafficpenalty
 
   add smoothness_penalty
 
@@ -304,13 +263,39 @@ assign costfactor
 
   #
   # actuals roads are o.k. if we have a bike hint and if there is no highspeed car traffic
+  # We use traffic penalty for ways with high car traffic
+  # See https://forum.openstreetmap.org/viewtopic.php?id=31044 for more information
   #
-       if ( highway=trunk|trunk_link         ) then ( if isbike then 1.5 else if ishighspeed then 20 else 5 )
-  else if ( highway=primary|primary_link     ) then ( if isbike then 1.3 else if ishighspeed then 10 else 1.5 )
-  else if ( highway=secondary|secondary_link ) then ( if isbike then 1.1 else if ishighspeed then 8 else 1.4 )
-  else if ( highway=tertiary|tertiary_link   ) then ( if isbike then 1.0 else if ishighspeed then 5 else 1.3 )
-  else if ( highway=unclassified             ) then ( if isbike then 1.0 else if ishighspeed then 3 else 1.1 )
-  else if ( highway=construction             ) then ( if isbike then 1.0 else 1.1 )
+  if ( highway=trunk|trunk_link ) then ( if isbike then 1.5 else if ishighspeed then 20 else 5 )
+  else if highway=primary|primary_link then
+  (
+    if or estimated_traffic_class=1|2 estimated_traffic_class= then ( if isbike then 1.6 else if ishighspeed then 3 else 1.8 )
+    else if estimated_traffic_class=3 then ( if isbike then 2 else if ishighspeed then 8 else 3 )
+    else if estimated_traffic_class=4 then ( if isbike then 2 else if ishighspeed then 9 else 3 )
+    else if estimated_traffic_class=5 then ( if isbike then 2 else if ishighspeed then 10 else 5 )
+    else if estimated_traffic_class=6|7 then ( if isbike then 2 else if ishighspeed then 15 else 5 )
+    else 0
+  )
+  else if highway=secondary|secondary_link then
+  (
+    if or estimated_traffic_class=1|2 estimated_traffic_class= then ( if isbike then 1.3 else if ishighspeed then 2.5 else 1.5 )
+    else if estimated_traffic_class=3 then ( if isbike then 1.3 else if ishighspeed then 5 else 1.4 )
+    else if estimated_traffic_class=4 then ( if isbike then 1.3 else if ishighspeed then 6 else 1.4 )
+    else if estimated_traffic_class=5 then ( if isbike then 1.3 else if ishighspeed then 7 else 1.4 )
+    else if estimated_traffic_class=6|7 then ( if isbike then 1.3 else if ishighspeed then 10 else 1.4 )
+    else 0
+  )
+  else if highway=tertiary|tertiary_link then
+  (
+    if or estimated_traffic_class=1|2 estimated_traffic_class= then ( if isbike then 1.1 else if ishighspeed then 1.5 else 1.3 )
+    else if estimated_traffic_class=3 then ( if isbike then 1.1 else if ishighspeed then 2 else 1.3 )
+    else if estimated_traffic_class=4 then ( if isbike then 1.1 else if ishighspeed then 2 else 1.3 )
+    else if estimated_traffic_class=5 then ( if isbike then 1.1 else if ishighspeed then 4 else 1.3 )
+    else if estimated_traffic_class=6|7 then ( if isbike then 1.1 else if ishighspeed then 10 else 1.4 )
+    else 0
+  )
+  else if ( highway=unclassified ) then ( if isbike then 1.0 else if ishighspeed then 3 else 1.1 )
+  else if ( highway=construction ) then ( if isbike then 1.0 else 1.1 )
 
   #
   # default for any other highway type not handled above
