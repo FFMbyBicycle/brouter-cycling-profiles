@@ -222,13 +222,8 @@ assign costfactor
   add smoothness_penalty
   add surface_penalty
 
-  #
-  # steps and ferries are special. Note this is handled
-  # before the cycleroute-switch, to be able
-  # to really exlude them be setting cost to infinity
-  #
-  if ( highway=steps ) then ( if allow_steps then 40 else 10000 )
-  else if ( route=ferry   ) then ( if allow_ferries then 5.67 else 10000 )
+  if ( highway=steps ) then ( if allow_steps then 40 else 9999 )
+  else if ( route=ferry   ) then ( if allow_ferries then 5.67 else 9999 )
 
   #
   # handle long-distance cycle-routes.
