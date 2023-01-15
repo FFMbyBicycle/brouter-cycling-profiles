@@ -329,7 +329,6 @@ assign costfactor
     )
   )
   else if ( highway=unclassified ) then ( if isbike then 1.0 else if ishighspeed then 3 else 1.1 )
-  else if ( highway=construction ) then ( if isbike then 1.0 else 1.1 )
 
   #
   # default for any other highway type not handled above
