@@ -26,7 +26,7 @@ assign stick_to_cycleroutes     = false # %stick_to_cycleroutes% | Set to true t
 assign avoid_unsafe             = false # %avoid_unsafe% | Set to true to avoid standard highways | boolean
 assign considerTurnRestrictions = true # %considerTurnRestrictions% | Set to true to take turn restrictions into account | boolean
 assign processUnusedTags        = false # %processUnusedTags% | Set to true to output unused tags in data tab | boolean
-assign consider_traffic         = true # %consider_traffic% | Set to true to avoid heavy car traffic | boolean
+assign consider_traffic         = false # %consider_traffic% | Set to true to avoid heavy car traffic, not supported on every brouter-web instance | boolean
 
 # Change elevation parameters
 assign consider_elevation = true  # %consider_elevation% | Set to false to ignore elevation in routing | boolean
