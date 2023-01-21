@@ -222,7 +222,7 @@ assign costfactor
   add smoothness_penalty
   add surface_penalty
 
-  if ( highway=steps ) then ( if allow_steps then 40 else 9999 )
+  if ( and not highway=steps ramp:wheelchair=yes ) then ( if allow_steps then 40 else 9999 )
   else if ( route=ferry   ) then ( if allow_ferries then 5.67 else 9999 )
 
   #
