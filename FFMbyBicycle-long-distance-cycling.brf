@@ -1,4 +1,4 @@
-# Version 2023-02-07-1
+# Version 2023-02-07-2
 # This bike profile will avoid
 # - car traffic
 # - turns
@@ -28,6 +28,11 @@ assign avoid_unsafe             = false # %avoid_unsafe% | Set to true to avoid 
 assign considerTurnRestrictions = true # %considerTurnRestrictions% | Set to true to take turn restrictions into account | boolean
 assign processUnusedTags        = false # %processUnusedTags% | Set to true to output unused tags in data tab | boolean
 assign consider_traffic         = false # %consider_traffic% | Set to true to avoid heavy car traffic, not supported on every brouter-web instance | boolean
+
+assign penalty_stop_sign        = 50 # %penalty_stop_sign% | Penalty for stop signs | number
+assign penalty_traffic_light    = 120 # %penalty_traffic_light% | Penalty for traffic lights, will be ignored if fuck_traffic_lights is set to true | number
+assign penalty_cycle_barrier    = 20 # %penalty_cycle_barrier% | Penalty for cycle barrier of all kind | number
+assign penalty_elevator         = 120 # %penalty_elevator% | Penalty for elevator usage | number
 
 # Change elevation parameters
 assign consider_elevation = true  # %consider_elevation% | Set to false to ignore elevation in routing | boolean
@@ -416,8 +421,8 @@ assign footaccess =
 # Avoid traffic signals and stop signs
 #
 assign initialcost =
-       add ( if highway=traffic_signals then ( if fuck_traffic_lights then 9999 else 120 )
-         else if highway=elevator then 120
+       add ( if highway=traffic_signals then ( if fuck_traffic_lights then 9999 else penalty_traffic_light )
+         else if highway=elevator then penalty_elevator
          # Only add penalty if stop sign is in direction of travel
          # see also https://github.com/poutnikl/Brouter-profiles/issues/25#issuecomment-864365688
          else if highway=stop then
@@ -426,10 +431,10 @@ assign initialcost =
            ( and not way:isreversed direction=forward|both )
            ( and way:isreversed direction=backward|both )
            ( direction= )
-           then 50
+           then penalty_stop_sign
            else 0
          )
-         else if barrier=cycle_barrier then 20
+         else if barrier=cycle_barrier then penalty_cycle_barrier
          else if and highway=crossing bicycle=no then 60
          else if and highway=crossing crossing=no then 300 # workaround affecting road routing
          else initial_cost_node )
