@@ -1,4 +1,4 @@
-# Version 2023-01-21-1
+# Version 2023-02-07-1
 # This bike profile will avoid
 # - car traffic
 # - turns
@@ -53,6 +53,9 @@ assign turnInstructionRoundabouts   = true  # %turnInstructionRoundabouts% | Set
 
 
 ---context:way   # following code refers to way-tags
+# Hack to make direction of way avaiable at node section for calculating stop sign direction
+# See also https://github.com/poutnikl/Brouter-profiles/issues/25#issuecomment-864365688
+assign isreversed = reversedirection=yes
 
 # classifier constants
 assign classifier_none  = 1
@@ -415,7 +418,17 @@ assign footaccess =
 assign initialcost =
        add ( if highway=traffic_signals then ( if fuck_traffic_lights then 9999 else 120 )
          else if highway=elevator then 120
-         else if highway=stop then 50
+         # Only add penalty if stop sign is in direction of travel
+         # see also https://github.com/poutnikl/Brouter-profiles/issues/25#issuecomment-864365688
+         else if highway=stop then
+         (
+           if or or
+           ( and not way:isreversed direction=forward|both )
+           ( and way:isreversed direction=backward|both )
+           ( direction= )
+           then 50
+           else 0
+         )
          else if barrier=cycle_barrier then 20
          else if and highway=crossing bicycle=no then 60
          else if and highway=crossing crossing=no then 300 # workaround affecting road routing
