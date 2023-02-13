@@ -1,4 +1,4 @@
-# Version 2023-02-11-1
+# Version 2023-02-13-1
 # This bike profile will avoid
 # - car traffic
 # - turns
@@ -75,6 +75,7 @@ assign any_cycleroute =
      else if route_bicycle_ncn=yes then true
      else if route_bicycle_rcn=yes then true
      else if route_bicycle_lcn=yes then true
+     else if lcn=yes then true
      else false
 
 assign nodeaccessgranted =
