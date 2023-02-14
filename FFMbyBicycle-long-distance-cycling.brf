@@ -1,4 +1,4 @@
-# Version 2023-02-14-1
+# Version 2023-02-14-2
 # This bike profile will avoid
 # - car traffic
 # - turns
@@ -33,6 +33,7 @@ assign penalty_stop_sign        = 50 # %penalty_stop_sign% | Penalty for stop si
 assign penalty_traffic_light    = 120 # %penalty_traffic_light% | Penalty for traffic lights, will be ignored if fuck_traffic_lights is set to true | number
 assign penalty_cycle_barrier    = 20 # %penalty_cycle_barrier% | Penalty for cycle barrier of all kind | number
 assign penalty_elevator         = 120 # %penalty_elevator% | Penalty for elevator usage | number
+assign penalty_compacted        = 0.2 # %penalty_compacted% | Penalty for ways with "compacted" surface (Germany: "wassergebundene Decke") | number
 
 # Change elevation parameters
 assign consider_elevation = true  # %consider_elevation% | Set to false to ignore elevation in routing | boolean
@@ -200,7 +201,7 @@ assign smoothness_penalty =
 # We allow some surfaces, but want to avoid them if easily possible
 assign surface_penalty =
     if or surface=sett cycleway:surface=sett then 0.5
-    else if or surface=compacted cycleway:surface=compacted then 0.2
+    else if or surface=compacted cycleway:surface=compacted then penalty_compacted
     else if isunpaved then 200 else
     0.0
 
