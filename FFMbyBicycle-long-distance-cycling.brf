@@ -1,4 +1,4 @@
-# Version 2023-02-14-7
+# Version 2023-02-14-8
 # This bike profile will avoid
 # - car traffic
 # - turns
@@ -290,7 +290,7 @@ assign costfactor
     )
     else
     (
-      if isbike then 1.6 else if ishighspeed then 5 else 2.2
+      if isbike then 1.6 else if ishighspeed then 7 else 4
     )
   )
   else if highway=secondary|secondary_link then
@@ -308,7 +308,7 @@ assign costfactor
     )
     else
     (
-      if isbike then 1.5 else if ishighspeed then 3.5 else 2.0
+      if isbike then 1.5 else if ishighspeed then 5 else 3
     )
   )
   else if highway=tertiary|tertiary_link then
