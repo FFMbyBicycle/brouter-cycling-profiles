@@ -1,4 +1,4 @@
-# Version 2023-02-13-1
+# Version 2023-02-14-1
 # This bike profile will avoid
 # - car traffic
 # - turns
@@ -260,6 +260,7 @@ assign costfactor
   else if ( highway=residential                        ) then 1.1
   else if ( highway=service                            ) then 1.0
   else if ( or highway=living_street living_street=yes ) then 2.5
+  else if ( highway=unclassified                       ) then ( if isbike then 1.0 else if ishighspeed then 3 else 1.1 )
   else if ( highway=construction                       ) then 200
 
   #
@@ -340,7 +341,6 @@ assign costfactor
       if isbike then 1.4 else if ishighspeed then 1.5 else 1.8
     )
   )
-  else if ( highway=unclassified ) then ( if isbike then 1.0 else if ishighspeed then 3 else 1.1 )
 
   #
   # default for any other highway type not handled above
