@@ -1,4 +1,4 @@
-# Version 2023-02-14-4
+# Version 2023-02-14-5
 # This bike profile will avoid
 # - car traffic
 # - turns
@@ -24,7 +24,6 @@ assign fuck_cars                = false # %fuck_cars% | Set to true to avoid ALL
 assign fuck_traffic_lights      = false # %fuck_traffic_lights% | Set to true to avoid ALL traffic lights, except when they're required to reach destination (TEST). Use this only if you know what you're doing, may result in crazy routing | boolean
 assign ignore_cycleroutes       = true # %ignore_cycleroutes% | Set to true for better elevation results | boolean
 assign stick_to_cycleroutes     = false # %stick_to_cycleroutes% | Set to true to just follow cycleroutes | boolean
-assign avoid_unsafe             = false # %avoid_unsafe% | Set to true to avoid standard highways | boolean
 assign considerTurnRestrictions = true # %considerTurnRestrictions% | Set to true to take turn restrictions into account | boolean
 assign processUnusedTags        = false # %processUnusedTags% | Set to true to output unused tags in data tab | boolean
 assign consider_traffic         = false # %consider_traffic% | Set to true to avoid heavy car traffic, not supported on every brouter-web instance | boolean
@@ -269,17 +268,13 @@ assign costfactor
     else if ( tracktype=grade5 ) then ( if ispaved then 20.0 else 9999 )
     else                              ( if probablyGood then 1.1 else 3.0 )
   )
-  #
-  # When avoiding unsafe ways, avoid highways without a bike hint
-  #
-  else add ( if ( and avoid_unsafe not isbike ) then 2 else 0 )
 
   #
   # actuals roads are o.k. if we have a bike hint and if there is no highspeed car traffic
   # We use traffic penalty for ways with high car traffic
   # See https://forum.openstreetmap.org/viewtopic.php?id=31044 for more information
   #
-  if ( highway=trunk|trunk_link ) then ( if isbike then 1.5 else if ishighspeed then 20 else 5 )
+  else if ( highway=trunk|trunk_link ) then ( if isbike then 1.5 else if ishighspeed then 20 else 5 )
   else if highway=primary|primary_link then
   (
     if and not hascycleway fuck_cars then 500
