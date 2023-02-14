@@ -1,4 +1,4 @@
-# Version 2023-02-14-6
+# Version 2023-02-14-7
 # This bike profile will avoid
 # - car traffic
 # - turns
@@ -32,7 +32,7 @@ assign penalty_stop_sign        = 50 # %penalty_stop_sign% | Penalty for stop si
 assign penalty_traffic_light    = 120 # %penalty_traffic_light% | Penalty for traffic lights, will be ignored if fuck_traffic_lights is set to true | number
 assign penalty_cycle_barrier    = 20 # %penalty_cycle_barrier% | Penalty for cycle barrier of all kind | number
 assign penalty_elevator         = 120 # %penalty_elevator% | Penalty for elevator usage | number
-assign penalty_compacted        = 0.2 # %penalty_compacted% | Penalty for ways with "compacted" surface (Germany: "wassergebundene Decke") | number
+assign penalty_compacted        = 5 # %penalty_compacted% | Penalty for ways with "compacted" surface (Germany: "wassergebundene Decke") | number
 assign penalty_ferry_initial    = 8000 # %penalty_ferry_initial% | Initial penalty if switching from a highway to ferry, only used if allow_ferries is true | number
 
 # Change elevation parameters
