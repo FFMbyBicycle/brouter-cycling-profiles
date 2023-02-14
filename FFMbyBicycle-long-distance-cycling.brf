@@ -1,4 +1,4 @@
-# Version 2023-02-14-5
+# Version 2023-02-14-6
 # This bike profile will avoid
 # - car traffic
 # - turns
@@ -184,10 +184,10 @@ assign onewaypenalty = if badoneway then 300 else 0.0
 #
 
 assign smoothness_penalty =
-    if smoothness=excellent|very_good|good                    then -0.2 else
-    if smoothness=intermediate                                then 0.5 else
-    if smoothness=bad|robust_wheels|very_bad|high_clearance|horrible|off_road_wheels|very_horrible|impassable then 50.0 else
-    0.0
+    if smoothness=excellent|very_good|good then -0.2
+    else if smoothness=intermediate        then 0.5
+    else if smoothness=                    then 0
+    else 50.0 # This will handle smoothness=bad|robust_wheels|very_bad|high_clearance|horrible|off_road_wheels|very_horrible|impassable etc.
 
 # We allow some surfaces, but want to avoid them if easily possible
 assign surface_penalty =
