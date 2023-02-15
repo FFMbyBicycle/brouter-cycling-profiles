@@ -1,4 +1,4 @@
-# Version 2023-02-15-1
+# Version 2023-02-15-2
 # This bike profile will avoid
 # - car traffic
 # - turns
@@ -204,10 +204,12 @@ assign costfactor
   if ( and highway= not route=ferry ) then 10000
 
   #
-  # exclude motorways and proposed roads
+  # exclude some highway types
   #
-  else if ( highway=motorway|motorway_link ) then   10000
-  else if ( highway=proposed|abandoned     ) then   10000
+  else if ( highway=motorway|motorway_link|proposed|abandoned ) then 10000
+  else if highway=steps then
+    if ( or ramp:wheelchair=yes allow_steps ) then 40
+    else 9999
 
   #
   # all other exclusions below (access, steps, ferries,..)
@@ -223,11 +225,7 @@ assign costfactor
 
   add smoothness_penalty
   add surface_penalty
-
-  if highway=steps then
-    if ( or ramp:wheelchair=yes allow_steps ) then 40
-    else 9999
-  else if ( route=ferry   ) then ( if allow_ferries then 5.67 else 9999 )
+  if ( route=ferry   ) then ( if allow_ferries then 5.67 else 9999 )
 
   #
   # handle long-distance cycle-routes.
