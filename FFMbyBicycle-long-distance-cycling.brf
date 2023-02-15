@@ -1,4 +1,4 @@
-# Version 2023-02-15-3
+# Version 2023-02-15-4
 # This bike profile will avoid
 # - car traffic
 # - turns
@@ -18,37 +18,37 @@
 assign validForBikes = true
 
 # Use the following switches to change behaviour
-assign allow_steps              = false # %allow_steps% | Set to false to disallow steps | boolean
-assign allow_ferries            = false # %allow_ferries% | set to true to allow ferries | boolean
-assign fuck_cars                = false # %fuck_cars% | Set to true to avoid ALL car traffic / roads without cycleways wherever possible (TEST). Use this only if you know what you're doing, may result in crazy routing | boolean
-assign fuck_traffic_lights      = false # %fuck_traffic_lights% | Set to true to avoid ALL traffic lights, except when they're required to reach destination (TEST). Use this only if you know what you're doing, may result in crazy routing | boolean
-assign considerTurnRestrictions = true # %considerTurnRestrictions% | Set to true to take turn restrictions into account | boolean
-assign processUnusedTags        = false # %processUnusedTags% | Set to true to output unused tags in data tab | boolean
-assign consider_traffic         = false # %consider_traffic% | Set to true to avoid heavy car traffic, not supported on every brouter-web instance | boolean
+assign allow_steps                  = false # %allow_steps% | Set to false to disallow steps | boolean
+assign allow_ferries                = false # %allow_ferries% | set to true to allow ferries | boolean
+assign fuck_cars                    = false # %fuck_cars% | Set to true to avoid ALL car traffic / roads without cycleways wherever possible (TEST). Use this only if you know what you're doing, may result in crazy routing | boolean
+assign fuck_traffic_lights          = false # %fuck_traffic_lights% | Set to true to avoid ALL traffic lights, except when they're required to reach destination (TEST). Use this only if you know what you're doing, may result in crazy routing | boolean
+assign considerTurnRestrictions     = true # %considerTurnRestrictions% | Set to true to take turn restrictions into account | boolean
+assign processUnusedTags            = false # %processUnusedTags% | Set to true to output unused tags in data tab | boolean
+assign consider_traffic             = false # %consider_traffic% | Set to true to avoid heavy car traffic, not supported on every brouter-web instance | boolean
 
-assign penalty_stop_sign        = 50 # %penalty_stop_sign% | Penalty for stop signs | number
-assign penalty_traffic_light    = 120 # %penalty_traffic_light% | Penalty for traffic lights, will be ignored if fuck_traffic_lights is set to true | number
-assign penalty_cycle_barrier    = 20 # %penalty_cycle_barrier% | Penalty for cycle barrier of all kind | number
-assign penalty_elevator         = 120 # %penalty_elevator% | Penalty for elevator usage | number
-assign penalty_compacted        = 5 # %penalty_compacted% | Penalty for ways with "compacted" surface (Germany: "wassergebundene Decke") | number
-assign penalty_ferry_initial    = 8000 # %penalty_ferry_initial% | Initial penalty if switching from a highway to ferry, only used if allow_ferries is true | number
+assign penalty_stop_sign            = 50 # %penalty_stop_sign% | Penalty for stop signs | number
+assign penalty_traffic_light        = 120 # %penalty_traffic_light% | Penalty for traffic lights, will be ignored if fuck_traffic_lights is set to true | number
+assign penalty_cycle_barrier        = 20 # %penalty_cycle_barrier% | Penalty for cycle barrier of all kind | number
+assign penalty_elevator             = 120 # %penalty_elevator% | Penalty for elevator usage | number
+assign penalty_compacted            = 5 # %penalty_compacted% | Penalty for ways with "compacted" surface (Germany: "wassergebundene Decke") | number
+assign penalty_ferry_initial        = 8000 # %penalty_ferry_initial% | Initial penalty if switching from a highway to ferry, only used if allow_ferries is true | number
 
 # Change elevation parameters
-assign consider_elevation = true  # %consider_elevation% | Set to false to ignore elevation in routing | boolean
-assign downhillcost       = 80    # %downhillcost% | Cost for going downhill | number
-assign downhillcutoff     = 1.5   # %downhillcutoff% | Gradients below this value in percents are not counted. | number
-assign uphillcost         = 50     # %uphillcost% | Cost for going uphill | number
-assign uphillcutoff       = 1.5   # %uphillcutoff% | Gradients below this value in percents are not counted.  | number
+assign consider_elevation           = true  # %consider_elevation% | Set to false to ignore elevation in routing | boolean
+assign downhillcost                 = 80    # %downhillcost% | Cost for going downhill | number
+assign downhillcutoff               = 1.5   # %downhillcutoff% | Gradients below this value in percents are not counted. | number
+assign uphillcost                   = 50     # %uphillcost% | Cost for going uphill | number
+assign uphillcutoff                 = 1.5   # %uphillcutoff% | Gradients below this value in percents are not counted.  | number
 
-assign downhillcost       = if consider_elevation then downhillcost else 0
-assign uphillcost         = if consider_elevation then uphillcost else 0
+assign downhillcost                 = if consider_elevation then downhillcost else 0
+assign uphillcost                   = if consider_elevation then uphillcost else 0
 
-# Kinematic model parameters (travel time computation)
-assign totalMass  = 110     # %totalMass% | Mass (in kg) of the bike + biker, for travel time computation | number
-assign maxSpeed   = 40     # %maxSpeed% | Absolute maximum speed (in km/h), for travel time computation | number
-assign S_C_x      = 0.225  # %S_C_x% | Drag coefficient times the reference area (in m^2), for travel time computation | number
-assign C_r        = 0.01   # %C_r% | Rolling resistance coefficient (dimensionless), for travel time computation | number
-assign bikerPower = 110    # %bikerPower% | Average power (in W) provided by the biker, for travel time computation | number
+# Kinematic model parameters (tr    avel time computation)
+assign totalMass                    = 110     # %totalMass% | Mass (in kg) of the bike + biker, for travel time computation | number
+assign maxSpeed                     = 40     # %maxSpeed% | Absolute maximum speed (in km/h), for travel time computation | number
+assign S_C_x                        = 0.225  # %S_C_x% | Drag coefficient times the reference area (in m^2), for travel time computation | number
+assign C_r                          = 0.01   # %C_r% | Rolling resistance coefficient (dimensionless), for travel time computation | number
+assign bikerPower                   = 110    # %bikerPower% | Average power (in W) provided by the biker, for travel time computation | number
 
 # Turn instructions settings
 assign turnInstructionMode          = 3     # %turnInstructionMode% | Mode for the generated turn instructions | [0=none, 1=auto-choose, 2=locus-style, 3=osmand-style]
@@ -68,7 +68,6 @@ assign classifier_ferry = 2
 #
 # pre-calculate some logical expressions
 #
-
 assign any_cycleroute =
      if      route_bicycle_icn=yes then true
      else if route_bicycle_ncn=yes then true
@@ -81,12 +80,12 @@ assign nodeaccessgranted =
      if any_cycleroute then true
      else lcn=yes
 
-assign hascycleway = if ( and ( or cycleway= cycleway=no|none ) and ( or cycleway:left= cycleway:left=no ) ( or cycleway:right= cycleway:right=no ) ) then 0 else 1
-assign isbike = or bicycle=yes or bicycle=permissive or bicycle=designated or lcn=yes hascycleway
-assign ispaved = or surface=paved|asphalt|concrete|wood|paving_stones|metal|sett or cycleway:surface=paved|asphalt|concrete|paving_stones|sett ( and surface=concrete concrete=plates|lanes ) # surface=concrete concrete=plates|lanes is an alias for surface=concrete:plates / surface=concrete:lanes, see also https://github.com/abrensch/brouter/issues/61
-assign isunpaved = or surface=unpaved|compacted|gravel|pebblestone|ground|dirt|grass|mud|sand|cobblestone|fine_gravel|earth|grass_paver cycleway:surface=unpaved|compacted|gravel|cobblestone|fine_gravel
+assign hascycleway  = if ( and ( or cycleway= cycleway=no|none ) and ( or cycleway:left= cycleway:left=no ) ( or cycleway:right= cycleway:right=no ) ) then 0 else 1
+assign isbike       = or bicycle=yes or bicycle=permissive or bicycle=designated or lcn=yes hascycleway
+assign ispaved      = or surface=paved|asphalt|concrete|wood|paving_stones|metal|sett or cycleway:surface=paved|asphalt|concrete|paving_stones|sett ( and surface=concrete concrete=plates|lanes ) # surface=concrete concrete=plates|lanes is an alias for surface=concrete:plates / surface=concrete:lanes, see also https://github.com/abrensch/brouter/issues/61
+assign isunpaved    = or surface=unpaved|compacted|gravel|pebblestone|ground|dirt|grass|mud|sand|cobblestone|fine_gravel|earth|grass_paver cycleway:surface=unpaved|compacted|gravel|cobblestone|fine_gravel
 assign probablyGood = or ispaved and ( or isbike highway=footway ) ( or not isunpaved surface=compacted )
-assign ishighspeed = or maxspeed=70|80|90|100|110|120|130 maxspeed= # Avoid streets with high speed car traffic and no cycling infrastructure
+assign ishighspeed  = or maxspeed=70|80|90|100|110|120|130 maxspeed= # Avoid streets with high speed car traffic and no cycling infrastructure
 
 #
 # this is the cost (in Meter) for a 90-degree turn
@@ -173,7 +172,6 @@ assign onewaypenalty = if badoneway then 300 else 0.0
 # must be >=1 and it's supposed to be close to 1 for
 # the type of way the routing profile is searching for
 #
-
 assign smoothness_penalty =
     if smoothness=excellent|very_good|good then -0.2
     else if smoothness=intermediate        then 0.5
@@ -221,7 +219,7 @@ assign costfactor
   #
   # some other highway types
   #
-  else if      ( highway=pedestrian                         ) then 5
+  else if ( highway=pedestrian ) then 5
   # Only allow footways with "Radverkehr frei" (Germany) at high costs when it is not a bridge/tunnel (good shortcut). Those ways in most cases are quite narrow and not eligible for riding your normal speed.
   else if ( and ( or ( and highway=footway ( or bicycle=yes bicycle=designated ) ) ( and highway=path and foot=designated bicycle=yes ) ) ( or bridge=yes tunnel=yes ) ) then 1.0
   else if highway=path then
@@ -320,7 +318,6 @@ assign costfactor
   else 2.0
 
 # way priorities used for voice hint generation
-
 assign priorityclassifier =
 
   if      ( highway=motorway                          ) then  30
@@ -345,7 +342,6 @@ assign priorityclassifier =
   else 0
 
 # some more classifying bits used for voice hint generation...
-
 assign isbadoneway = not equal onewaypenalty 0
 assign isgoodoneway = if reversedirection=yes then oneway=-1
                       else if oneway= then junction=roundabout else oneway=yes|true|1
@@ -357,7 +353,6 @@ assign isgoodforcars = if greater priorityclassifier 6 then true
                   else false
 
 # ... encoded into a bitmask
-
 assign classifiermask add          isbadoneway
                       add multiply isgoodoneway   2
                       add multiply isroundabout   4
