@@ -1,4 +1,4 @@
-# Version 2023-02-14-8
+# Version 2023-02-15-1
 # This bike profile will avoid
 # - car traffic
 # - turns
@@ -224,7 +224,9 @@ assign costfactor
   add smoothness_penalty
   add surface_penalty
 
-  if ( and not highway=steps ramp:wheelchair=yes ) then ( if allow_steps then 40 else 9999 )
+  if highway=steps then
+    if ( or ramp:wheelchair=yes allow_steps ) then 40
+    else 9999
   else if ( route=ferry   ) then ( if allow_ferries then 5.67 else 9999 )
 
   #
