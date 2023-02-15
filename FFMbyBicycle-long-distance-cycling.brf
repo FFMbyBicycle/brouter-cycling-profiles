@@ -1,4 +1,4 @@
-# Version 2023-02-15-2
+# Version 2023-02-15-3
 # This bike profile will avoid
 # - car traffic
 # - turns
@@ -22,8 +22,6 @@ assign allow_steps              = false # %allow_steps% | Set to false to disall
 assign allow_ferries            = false # %allow_ferries% | set to true to allow ferries | boolean
 assign fuck_cars                = false # %fuck_cars% | Set to true to avoid ALL car traffic / roads without cycleways wherever possible (TEST). Use this only if you know what you're doing, may result in crazy routing | boolean
 assign fuck_traffic_lights      = false # %fuck_traffic_lights% | Set to true to avoid ALL traffic lights, except when they're required to reach destination (TEST). Use this only if you know what you're doing, may result in crazy routing | boolean
-assign ignore_cycleroutes       = true # %ignore_cycleroutes% | Set to true for better elevation results | boolean
-assign stick_to_cycleroutes     = false # %stick_to_cycleroutes% | Set to true to just follow cycleroutes | boolean
 assign considerTurnRestrictions = true # %considerTurnRestrictions% | Set to true to take turn restrictions into account | boolean
 assign processUnusedTags        = false # %processUnusedTags% | Set to true to output unused tags in data tab | boolean
 assign consider_traffic         = false # %consider_traffic% | Set to true to avoid heavy car traffic, not supported on every brouter-web instance | boolean
@@ -83,10 +81,6 @@ assign nodeaccessgranted =
      if any_cycleroute then true
      else lcn=yes
 
-assign is_ldcr =
-     if ignore_cycleroutes then false
-     else any_cycleroute
-
 assign hascycleway = if ( and ( or cycleway= cycleway=no|none ) and ( or cycleway:left= cycleway:left=no ) ( or cycleway:right= cycleway:right=no ) ) then 0 else 1
 assign isbike = or bicycle=yes or bicycle=permissive or bicycle=designated or lcn=yes hascycleway
 assign ispaved = or surface=paved|asphalt|concrete|wood|paving_stones|metal|sett or cycleway:surface=paved|asphalt|concrete|paving_stones|sett ( and surface=concrete concrete=plates|lanes ) # surface=concrete concrete=plates|lanes is an alias for surface=concrete:plates / surface=concrete:lanes, see also https://github.com/abrensch/brouter/issues/61
@@ -97,11 +91,8 @@ assign ishighspeed = or maxspeed=70|80|90|100|110|120|130 maxspeed= # Avoid stre
 #
 # this is the cost (in Meter) for a 90-degree turn
 # The actual cost is calculated as turncost*cos(angle)
-# (Suppressing turncost while following longdistance-cycleways
-# makes them a little bit more magnetic)
 #
-assign turncost = if is_ldcr then 0
-                  else if junction=roundabout then 0
+assign turncost = if junction=roundabout then 0
                   else if or bridge=yes tunnel=yes then 40 # there are a lot of nice bridge/tunnel shortcuts with tight corners, which will save energy and time
                   else 180 # This is quite high but will allow a more straight route at the cost of a longer route. Still saves time and energy because of missing slowdowns at turns
 
@@ -228,16 +219,9 @@ assign costfactor
   if ( route=ferry   ) then ( if allow_ferries then 5.67 else 9999 )
 
   #
-  # handle long-distance cycle-routes.
-  #
-  else if ( is_ldcr ) then 1                   # always treated as perfect (=1)
-  else
-  add ( if stick_to_cycleroutes then 0.5 else 0.05 )  # everything else somewhat up
-
-  #
   # some other highway types
   #
-  if      ( highway=pedestrian                         ) then 5
+  else if      ( highway=pedestrian                         ) then 5
   # Only allow footways with "Radverkehr frei" (Germany) at high costs when it is not a bridge/tunnel (good shortcut). Those ways in most cases are quite narrow and not eligible for riding your normal speed.
   else if ( and ( or ( and highway=footway ( or bicycle=yes bicycle=designated ) ) ( and highway=path and foot=designated bicycle=yes ) ) ( or bridge=yes tunnel=yes ) ) then 1.0
   else if highway=path then
