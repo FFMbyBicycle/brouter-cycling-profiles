@@ -1,4 +1,4 @@
-# Version 2023-02-27-1
+# Version 2023-02-27-2
 # This bike profile will avoid
 # - car traffic
 # - turns
@@ -25,6 +25,7 @@ assign fuck_traffic_lights          = false # %fuck_traffic_lights% | Set to tru
 assign considerTurnRestrictions     = true # %considerTurnRestrictions% | Set to true to take turn restrictions into account | boolean
 assign processUnusedTags            = false # %processUnusedTags% | Set to true to output unused tags in data tab | boolean
 assign consider_traffic             = false # %consider_traffic% | Set to true to avoid heavy car traffic, not supported on every brouter-web instance | boolean
+assign avoid_unknown_surface        = true # %avoid_unknown_surface% | Set to false to allow paths with unknown surface | boolean
 
 assign penalty_stop_sign            = 50 # %penalty_stop_sign% | Penalty for stop signs | number
 assign penalty_traffic_light        = 120 # %penalty_traffic_light% | Penalty for traffic lights, will be ignored if fuck_traffic_lights is set to true | number
@@ -182,8 +183,9 @@ assign smoothness_penalty =
 assign surface_penalty =
     if or surface=sett cycleway:surface=sett then 0.5
     else if or surface=compacted cycleway:surface=compacted then penalty_compacted
-    else if isunpaved then 200 else
-    0.0
+    else if isunpaved then 200
+    else if and and avoid_unknown_surface highway=path surface= then 200
+    else 0.0
 
 assign costfactor
 
@@ -248,7 +250,7 @@ assign costfactor
     else if ( tracktype=grade3 ) then ( if ispaved then 10.0 else 9999 )
     else if ( tracktype=grade4 ) then ( if ispaved then 15.0 else 9999 )
     else if ( tracktype=grade5 ) then ( if ispaved then 20.0 else 9999 )
-    else                              ( if probablyGood then 1.1 else 3.0 )
+    else                              ( if probablyGood then 1.1 else if avoid_unknown_surface then 200 else 3.0 )
   )
 
   #
