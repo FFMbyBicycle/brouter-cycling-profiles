@@ -1,4 +1,4 @@
-# Version 2023-02-15-4
+# Version 2023-02-27-1
 # This bike profile will avoid
 # - car traffic
 # - turns
@@ -18,7 +18,7 @@
 assign validForBikes = true
 
 # Use the following switches to change behaviour
-assign allow_steps                  = false # %allow_steps% | Set to false to disallow steps | boolean
+assign allow_steps                  = false # %allow_steps% | Set to true to allow steps | boolean
 assign allow_ferries                = false # %allow_ferries% | set to true to allow ferries | boolean
 assign fuck_cars                    = false # %fuck_cars% | Set to true to avoid ALL car traffic / roads without cycleways wherever possible (TEST). Use this only if you know what you're doing, may result in crazy routing | boolean
 assign fuck_traffic_lights          = false # %fuck_traffic_lights% | Set to true to avoid ALL traffic lights, except when they're required to reach destination (TEST). Use this only if you know what you're doing, may result in crazy routing | boolean
