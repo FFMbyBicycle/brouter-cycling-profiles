@@ -1,4 +1,4 @@
-# Version 2023-02-27-2
+# Version 2023-03-09-1
 # This bike profile will avoid
 # - car traffic
 # - turns
@@ -405,6 +405,7 @@ assign initialcost =
            else 0
          )
          else if barrier=cycle_barrier then penalty_cycle_barrier
+         else if ford=yes then 9999
          else if and highway=crossing bicycle=no then 60
          else if and highway=crossing crossing=no then 300 # workaround affecting road routing
          else initial_cost_node )
