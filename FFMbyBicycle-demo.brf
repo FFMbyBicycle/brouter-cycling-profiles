@@ -9,8 +9,8 @@
 assign validForBikes = true
 
 # Use the following switches to change behaviour
-assign allow_badoneway          = true # %allow_badoneway% | Set to allow usage of streets in the wrong direction | boolean
-assign allow_motorway           = true # %allow_motorway% | Set to true to allow cycling on motorways | boolean
+assign allow_badoneway          = true # %allow_badoneway% | Unset to forbid usage of streets in the wrong direction, should be okay if police is with you | boolean
+assign allow_motorway           = false # %allow_motorway% | Set to true to allow cycling on motorways | boolean
 assign maxSpeed                 = 14   # %maxSpeed% | Absolute maximum speed (in km/h), for travel time computation | number
 assign bikerPower               = 70   # %bikerPower% | Average power (in W) provided by the biker, for travel time computation | number
 
@@ -133,9 +133,9 @@ assign onewaypenalty =
        if ( badoneway ) then
          if ( allow_badoneway ) then
            if ( highway=motorway|motorway_link              ) then 3
-           else if ( highway=primary|primary_link              ) then 1
-           else if ( highway=secondary|secondary_link          ) then 1
-           else if ( highway=tertiary|tertiary_link            ) then 1
+           else if ( highway=primary|primary_link              ) then 1.2
+           else if ( highway=secondary|secondary_link          ) then 1.2
+           else if ( highway=tertiary|tertiary_link            ) then 1.2
            else 1
          else 9999
        else 0
@@ -148,15 +148,15 @@ assign onewaypenalty =
 # the type of way the routing profile is searching for
 #
 assign smoothness_penalty =
-    if smoothness=excellent|very_good|good then -0.2
-    else if smoothness=intermediate|bad|robust_wheels|very_bad|high_clearance|horrible|off_road_wheels|very_horrible|impassable then 9999
-    else 0.0
+    if smoothness=excellent|very_good|good|intermediate then 0.0
+    else if smoothness=bad|robust_wheels|very_bad|high_clearance|horrible|off_road_wheels|very_horrible|impassable then 9999
+    else 0.1
 
 assign lanes_penalty =
-  if lanes=1 then 5
-  else if lanes=2 then 0.5
+  if lanes=1 then 0.5
+  else if lanes=2 then 0.2
   else if lanes=3|4|5|6 then 0
-  else 100
+  else 2
 
 assign costfactor
 
@@ -175,7 +175,7 @@ assign costfactor
   #
   # apply oneway-and access-penalties
   #
-  add max onewaypenalty accesspenalty
+  add onewaypenalty
   add smoothness_penalty
   add lanes_penalty
 
@@ -187,7 +187,7 @@ assign costfactor
   else if ( highway=unclassified                       ) then 50
   # Only allow footways with "Radverkehr frei" (Germany) at high costs when it is not a bridge/tunnel (good shortcut). Those ways in most cases are quite narrow and not eligible for riding your normal speed.
   else if ( and highway=footway and ( or bicycle=yes bicycle=designated ) ( or bridge=yes tunnel=yes ) ) then 100
-  else if ( highway=pedestrian                         ) then 9999
+  else if ( highway=pedestrian                         ) then 20
   else if ( highway=footway                            ) then 9999
   else if ( highway=bridleway                          ) then 9999
   else if ( highway=cycleway                           ) then 9999
@@ -213,40 +213,16 @@ assign costfactor
   # This profile will stick to large and heavily used roads
   # See https://forum.openstreetmap.org/viewtopic.php?id=31044 for more information
   #
-    else if ( highway=motorway|motorway_link ) then 1.0
+    else if ( and allow_motorway highway=motorway|motorway_link ) then 1.0
     else if ( highway=trunk|trunk_link ) then 1.0
-    else if highway=primary|primary_link then
-    (
-      if or estimated_traffic_class=1|2 estimated_traffic_class= then 1.5
-      else if estimated_traffic_class=3 then 1.2
-      else if estimated_traffic_class=4 then 1.4
-      else if estimated_traffic_class=5 then 1.6
-      else if estimated_traffic_class=6|7 then 2.0
-      else 0
-    )
-    else if highway=secondary|secondary_link then
-    (
-      if or estimated_traffic_class=1|2 estimated_traffic_class= then 1.4
-      else if estimated_traffic_class=3 then 1.6
-      else if estimated_traffic_class=4 then 1.8
-      else if estimated_traffic_class=5 then 2.0
-      else if estimated_traffic_class=6|7 then 2.4
-      else 0
-    )
-    else if highway=tertiary|tertiary_link then
-    (
-      if or estimated_traffic_class=1|2 estimated_traffic_class= then 4.0
-      else if estimated_traffic_class=3 then 4.4
-      else if estimated_traffic_class=4 then 4.6
-      else if estimated_traffic_class=5 then 4.8
-      else if estimated_traffic_class=6|7 then 4.0
-      else 0
-    )
+    else if highway=primary|primary_link then 1.5
+    else if highway=secondary|secondary_link then 1.4
+    else if highway=tertiary|tertiary_link then 4.9
 
   #
   # default for any other highway type not handled above
   #
-  else 2.0
+  else 20.0
 
 # way priorities used for voice hint generation
 
