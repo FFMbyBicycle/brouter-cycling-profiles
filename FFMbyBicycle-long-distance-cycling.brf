@@ -184,7 +184,7 @@ assign surface_penalty =
     if or surface=sett cycleway:surface=sett then 0.5
     else if or surface=compacted cycleway:surface=compacted then penalty_compacted
     else if isunpaved then 200
-    else if and and avoid_unknown_surface highway=path surface= then 200
+    else if and and and avoid_unknown_surface highway=path surface= cycleway:surface= then 200
     else 0.0
 
 assign costfactor
