@@ -11,6 +11,7 @@ assign validForBikes = true
 # Use the following switches to change behaviour
 assign allow_badoneway          = true # %allow_badoneway% | Unset to forbid usage of streets in the wrong direction, should be okay if police is with you | boolean
 assign allow_motorway           = false # %allow_motorway% | Set to true to allow cycling on motorways | boolean
+assign allow_rails              = false # %allow_rails% | Set to true to allow cycling on roads with embedded rails | boolean
 assign maxSpeed                 = 14   # %maxSpeed% | Absolute maximum speed (in km/h), for travel time computation | number
 assign bikerPower               = 70   # %bikerPower% | Average power (in W) provided by the biker, for travel time computation | number
 
@@ -158,6 +159,18 @@ assign lanes_penalty =
   else if lanes=3|4|5|6 then 0
   else 2
 
+# Calculate if embedded rails are result in a high penalty (no cycle lane) or a lower penalty (cycle lane exists)
+# Advisory cycle lanes (German Schutzstreifen) are not treated as cycleway lanes because they are too narrow.
+assign cyclelane =
+       if cycleway=lane then true
+       else if and reversedirection=yes cycleway:left=lane then true
+       else cycleway:right=lane
+assign has_rails = ( embedded_rails=tram|yes|rail )
+assign rail_penalty =
+       if or allow_rails ( not has_rails ) then 0
+       else if cyclelane then 3000
+       else 9000
+
 assign costfactor
 
   #
@@ -178,6 +191,7 @@ assign costfactor
   add onewaypenalty
   add smoothness_penalty
   add lanes_penalty
+  add rail_penalty
 
   #
   # some other highway types
