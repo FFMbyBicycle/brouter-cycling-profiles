@@ -82,7 +82,7 @@ assign initialcost =
      if ( equal initialclassifier classifier_ferry ) then 10000
      else 0
 
-# Boolean flags for motorroads if allow_motorway is set to fals
+# Boolean flags for motorroads if allow_motorway is set to false
 # Roads with simple bicycle=no|use_sidepath are not considered as motorized only
 assign motorized_accessible = or ( not motorroad=yes ) allow_motorway
 
