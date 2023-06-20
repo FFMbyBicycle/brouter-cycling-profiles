@@ -210,7 +210,7 @@ assign costfactor
   else if ( highway=footway                            ) then 9999
   else if ( highway=bridleway                          ) then 9999
   else if ( highway=cycleway                           ) then 9999
-  else if ( highway=service                            ) then 9999
+  else if ( highway=service                            ) then 500
   else if ( highway=construction                       ) then 9999
   else if ( highway=proposed|abandoned                 ) then 10000
   else if ( highway=steps                              ) then 10000
