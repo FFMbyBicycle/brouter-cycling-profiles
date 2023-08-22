@@ -160,7 +160,11 @@ assign accesspenalty =
 #
 assign badoneway =
        if reversedirection=yes then
-         if ( or cycleway=opposite|opposite_lane|opposite_track oneway:bicycle=no ) then false
+         # regular one-way streets with "Radverkehr frei"
+         if and oneway=yes ( or cycleway=opposite|opposite_lane|opposite_track oneway:bicycle=no ) then false
+         # respect one-way cycle ways
+         else if or oneway:bicycle=yes oneway=yes then true
+         # don't use roundabouts in the wrong direction
          else if oneway= then junction=roundabout
          else oneway=yes|true|1
        else oneway=-1
