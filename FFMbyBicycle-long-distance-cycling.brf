@@ -222,6 +222,7 @@ assign costfactor
   add smoothness_penalty
   add surface_penalty
   if ( route=ferry   ) then ( if allow_ferries then 5.67 else 9999 )
+  else if ford=yes then 10000
 
   #
   # some other highway types
