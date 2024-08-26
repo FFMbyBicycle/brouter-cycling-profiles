@@ -201,12 +201,12 @@ assign costfactor
   #
   # some other highway types
   #
-  if      ( or highway=living_street living_street=yes ) then 500
-  else if ( highway=residential                        ) then 50
-  else if ( highway=unclassified                       ) then 50
+  if      ( or highway=living_street living_street=yes ) then 3.5
+  else if ( highway=residential                        ) then 3.0
+  else if ( highway=unclassified                       ) then 2.5
   # Only allow footways with "Radverkehr frei" (Germany) at high costs when it is not a bridge/tunnel (good shortcut). Those ways in most cases are quite narrow and not eligible for riding your normal speed.
   else if ( and highway=footway and ( or bicycle=yes bicycle=designated ) ( or bridge=yes tunnel=yes ) ) then 100
-  else if ( highway=pedestrian                         ) then 20
+  else if ( highway=pedestrian                         ) then 3.5
   else if ( highway=footway                            ) then 9999
   else if ( highway=bridleway                          ) then 9999
   else if ( highway=cycleway                           ) then 9999
@@ -236,7 +236,7 @@ assign costfactor
     else if ( and motorized_accessible highway=trunk|trunk_link ) then 1.0
     else if ( and motorized_accessible highway=primary|primary_link ) then 1.5
     else if ( and motorized_accessible highway=secondary|secondary_link ) then 1.4
-    else if ( and motorized_accessible highway=tertiary|tertiary_link ) then 4.9
+    else if ( and motorized_accessible highway=tertiary|tertiary_link ) then 2.0
 
   #
   # default for any other highway type not handled above
