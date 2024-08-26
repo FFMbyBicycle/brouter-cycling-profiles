@@ -20,6 +20,7 @@ assign validForBikes = true
 # Use the following switches to change behaviour
 assign allow_steps                  = false # %allow_steps% | Set to true to allow steps | boolean
 assign allow_ferries                = false # %allow_ferries% | set to true to allow ferries | boolean
+assign allow_light_gravel           = true # %allow_light_gravel% | set to true to allow good ridable off-road tracks with "compacted" or gravelish surface | boolean
 assign fuck_cars                    = false # %fuck_cars% | Set to true to avoid ALL car traffic / roads without cycleways wherever possible (TEST). Use this only if you know what you're doing, may result in crazy routing | boolean
 assign fuck_traffic_lights          = false # %fuck_traffic_lights% | Set to true to avoid ALL traffic lights, except when they're required to reach destination (TEST). Use this only if you know what you're doing, may result in crazy routing | boolean
 assign considerTurnRestrictions     = true # %considerTurnRestrictions% | Set to true to take turn restrictions into account | boolean
@@ -85,6 +86,7 @@ assign hascycleway  = if ( and ( or cycleway= cycleway=no|none ) and ( or cyclew
 assign isbike       = or bicycle=yes or bicycle=permissive or bicycle=designated or lcn=yes hascycleway
 assign ispaved      = or surface=paved|asphalt|concrete|wood|paving_stones|metal|sett or cycleway:surface=paved|asphalt|concrete|paving_stones|sett ( and surface=concrete concrete=plates|lanes ) # surface=concrete concrete=plates|lanes is an alias for surface=concrete:plates / surface=concrete:lanes, see also https://github.com/abrensch/brouter/issues/61
 assign isunpaved    = or surface=unpaved|compacted|gravel|pebblestone|ground|dirt|grass|mud|sand|cobblestone|fine_gravel|earth|grass_paver cycleway:surface=unpaved|compacted|gravel|cobblestone|fine_gravel
+assign isunpaved_light_gravel    = or surface=unpaved|compacted|gravel|pebblestone|ground|dirt|grass|fine_gravel|earth|grass_paver cycleway:surface=unpaved|compacted|gravel|fine_gravel
 assign probablyGood = or ispaved and ( or isbike highway=footway ) ( or not isunpaved surface=compacted )
 assign ishighspeed  = or maxspeed=70|80|90|100|110|120|130 maxspeed= # Avoid streets with high speed car traffic and no cycling infrastructure
 
@@ -129,6 +131,7 @@ assign bikeaccess =
        # Only allow footways with "Radverkehr frei" (Germany) when it is a bridge (good shortcut). Those ways in most cases are quite narrow and not eligible for riding your normal speed.
        if and highway=footway ( or bicycle=yes bicycle=designated ) then true
        else if highway=footway then false
+       else if and access=no not bicycle=yes then false
        else if any_cycleroute then true
        else if bicycle= then
        (
