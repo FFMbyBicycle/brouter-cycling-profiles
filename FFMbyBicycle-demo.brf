@@ -3,6 +3,8 @@
 # OTHER USAGE MAY PUT YOU IN DANGER
 #
 
+# License: GNU GPLv3
+
 ---context:global   # following code refers to global config
 
 # Bike profile
