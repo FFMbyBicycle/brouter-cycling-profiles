@@ -175,8 +175,8 @@ assign cyclelane =
 assign has_rails = ( embedded_rails=tram|yes|rail )
 assign rail_penalty =
        if or allow_rails ( not has_rails ) then 0
-       else if cyclelane then 3000
-       else 9000
+       else if cyclelane then 20
+       else 50
 
 assign costfactor
 
