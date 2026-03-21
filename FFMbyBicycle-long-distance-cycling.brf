@@ -401,7 +401,7 @@ assign footaccess =
 # Avoid traffic signals and stop signs
 #
 assign initialcost =
-       add ( if highway=traffic_signals then ( if fuck_traffic_lights then 9999 else penalty_traffic_light )
+       add ( if or highway=traffic_signals crossing=traffic_signals then ( if fuck_traffic_lights then 9999 else penalty_traffic_light )
          else if highway=elevator then penalty_elevator
          # Only add penalty if stop sign is in direction of travel
          # see also https://github.com/poutnikl/Brouter-profiles/issues/25#issuecomment-864365688
